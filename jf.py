@@ -150,7 +150,7 @@ def findAtDir ( strpath ):     # always strpath is a start point to search .
             continue
 
         if boolfnmatch == True :
-            files=[aa for aa in files if fnmatch.fnmatch(aa.lower(), findfile)],
+            files=[aa for aa in files if fnmatch.fnmatch(aa.lower(), findfile)]
         elif findfre == True :
             files = [aa for aa in files if len(refindfile.findall(aa)) > 0 ]
         elif len(findfile)> 0 :
