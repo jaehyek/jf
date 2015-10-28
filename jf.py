@@ -171,7 +171,10 @@ def findAtDir ( strpath ):     # always strpath is a start point to search .
                 strtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(os.path.getmtime(absfilename)) )
                 strsize = os.path.getsize(absfilename)
                 msg = filename + ' : ' + strtime + ': ' + str(strsize) + ' bytes'
-                print (msg)
+                try:
+                    print (msg)
+                except:
+                    print("@@@@@@ file name error while print at dir : %s @@@@@" % os.path.abspath( root) )
                 if len(commandOnFile) > 0 :
                     runCommand( absfilename, commandOnFile )
             else:
