@@ -169,7 +169,7 @@ def findAtDir ( strpath ):     # always strpath is a start point to search .
                 # just find a file
                 strtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(os.path.getmtime(absfilename)) )
                 strsize = os.path.getsize(absfilename)
-                msg = filename + ' : ' + strtime + ': ' + str(strsize) + ' bytes'
+                msg = absfilename + ' : ' + strtime + ': ' + str(strsize) + ' bytes'
                 try:
                     print (msg)
                 except:
