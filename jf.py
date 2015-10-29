@@ -73,6 +73,7 @@ def findtextinfile(filename):
 
             for findstr in listfindstr :
                 pos = textline.lower().find(findstr.lower(), 0)
+                found = 0
                 if (pos != -1 ):
                     found = 1
                     # check and skip the long sentense
@@ -88,10 +89,8 @@ def findtextinfile(filename):
                     textline = textline.strip()
                     msg =  os.path.abspath(filename) + '.' + str(linenumber) + "::  " + textline
                     print (msg)
-                else:
-                    found = 0
-            if found == 1 :
-                countTextMatched += 1
+                if found == 1 :
+                    countTextMatched += 1
     except:
         print("*** Except raised inside of %s. *** "%filename)
 
@@ -315,7 +314,7 @@ if __name__ == "__main__":
         if len(findfile) > 0 :
             print (" the filename-matched file count : ", countFilenameMatched)
         if len(findtext) > 0 :
-            print (" the text-searched file count : ", countTextMatched)
+            print (" the text-matched line count : ", countTextMatched)
 
 
     if len(findlog) > 0 :
