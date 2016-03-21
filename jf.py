@@ -63,7 +63,7 @@ def findtextinfile(filename):
     linenumber = 0
     found = 0
 
-    f = open ( filename, 'r')
+    f = open ( filename, 'r', encoding='utf-8')
     while(True) :
         try:
             textline = f.readline()
