@@ -24,6 +24,8 @@ findconfig = ''
 findtre = False
 findfre = False
 boolfnmatch = False
+big = False
+nosubdir = False
 
 refindtext = 0
 refindfile = 0
@@ -51,12 +53,12 @@ class Tee(object):
 
 def findtextinfile(filename):
     global dirskiplist, findlog, findtext, finddir, findfile, commandOnFile
-    global findconfig, findtre, findfre, boolfnmatch
+    global findconfig, findtre, findfre, boolfnmatch, big
     global refindtext, refindfile, countFilenameMatched, countTextMatched
 
     nbytes = os.path.getsize(filename)
     nbytes = nbytes >> 20
-    if( nbytes > 5 ) :
+    if( nbytes > 5 and big == False ) :
         print (' too big file over 5MB : ' + filename)
         return
 
@@ -147,7 +149,7 @@ PatternMeaningforfnmatch
 
 def findAtDir ( strpath ):     # always strpath is a start point to search .
     global dirskiplist, findlog, findtext, finddir, findfile, commandOnFile
-    global findconfig, findtre, findfre, boolfnmatch
+    global findconfig, findtre, findfre, boolfnmatch, nosubdir
     global refindtext, refindfile, countFilenameMatched, countTextMatched
 
     for root, dirs, files in os.walk(strpath):
@@ -187,6 +189,9 @@ def findAtDir ( strpath ):     # always strpath is a start point to search .
                 if (isAllowedFileType( absfilename) == True) and ( isBinaryFile(absfilename) == False) :
                     findtextinfile( absfilename)
 
+        if nosubdir == True :
+            break
+
 
 
 
@@ -212,6 +217,8 @@ if __name__ == "__main__":
     cmdlineopt.add_argument('-default', action="store_true", dest="finddefault",  default=False, help='default path to config file. default = ~/.jf.txt' )
     cmdlineopt.add_argument('-tre', action="store_true", dest="findtre",  default=False, help='Using regular exepression, search, sort and print a word containg the findtext of -t opition' )
     cmdlineopt.add_argument('-fre', action="store_true", dest="findfre",  default=False, help='file matching pattern using regular express ' )
+    cmdlineopt.add_argument('-big', action="store_true", dest="big",  default=False, help='text search for 5MB-over size file' )
+    cmdlineopt.add_argument('-nosubdir', action="store_true", dest="nosubdir",  default=False, help='No searching with subdirectory' )
 
     cmdlineresults = cmdlineopt.parse_args()
 
@@ -244,6 +251,8 @@ if __name__ == "__main__":
         fileparser.add_argument('-default', action="store_true", dest="finddefault",  default=False, help='use the default config file')
         fileparser.add_argument('-tre', action="store_true", dest="findtre",  default=False, help='Using regular exepression, search, sort and print a word containg the findtext of -t opition' )
         fileparser.add_argument('-fre', action="store_true", dest="findfre",  default=False, help='file matching pattern using regular express ' )
+        fileparser.add_argument('-big', action="store_true", dest="big",  default=False, help='text search for 5MB-over size file' )
+        fileparser.add_argument('-nosubdir', action="store_true", dest="nosubdir",  default=False, help='No searching with subdirectory' )
 
         fileresults = fileparser.parse_args( filecommandstr.split(None) )
 
@@ -257,6 +266,8 @@ if __name__ == "__main__":
     findtext = cmdlineresults.findtext
     findtre = cmdlineresults.findtre
     findfre = cmdlineresults.findfre
+    big = cmdlineresults.big
+    nosubdir = cmdlineresults.nosubdir
 
 
     if len(finddir) == 0  :
@@ -290,6 +301,8 @@ if __name__ == "__main__":
     print ('dirskiplist =', dirskiplist)
     print ('findtre =', findtre)
     print ('findfre =', findfre)
+    print ('bing =', big)
+    print ('nosubdir =', nosubdir)
     print ("~~~~~~~~~~~~~~~~~~~~~~~ ver 2015.10.26 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
