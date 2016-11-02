@@ -98,7 +98,10 @@ def findtextinfile(filename):
                     textline = textline[startpos:endpos]
                 textline = textline.strip()
                 msg =  os.path.abspath(filename) + '.' + str(linenumber) + "::  " + textline
-                print (msg)
+                try:
+                    print (msg)
+                except:
+                    print(msg.encode("utf-8"))
             if found == 1 :
                 countTextMatched += 1
 
