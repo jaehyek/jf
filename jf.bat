@@ -1,0 +1,1 @@
+python D:\proj_py\jf\jf.py %*

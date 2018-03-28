@@ -51,6 +51,28 @@ class Tee(object):
         self.file.write(data)
         self.stdout.write(data)
 
+def detect_encoding(filename):
+    '''
+    이 함수는 file encoding type을 검출한다.
+    :param filename:
+    :return: 검출한 file encoding type
+    '''
+    encodings = ['utf-8', 'euc_kr','cp949', 'ascii']
+    import codecs
+    for e in encodings:
+        try:
+            fh = codecs.open(filename, 'r', encoding=e)
+            fh.readlines()
+            fh.seek(0)
+        except UnicodeDecodeError:
+            # print('got unicode error with %s , trying different encoding' % e)
+            continue
+        else:
+            # print('opening the file with encoding:  %s ' % e)
+            break
+
+    return e
+
 def findtextinfile(filename):
     global dirskiplist, findlog, findtext, finddir, findfile, commandOnFile
     global findconfig, findtre, findfre, boolfnmatch, big
@@ -65,7 +87,13 @@ def findtextinfile(filename):
     linenumber = 0
     found = 0
 
-    f = open ( filename, 'r', encoding='utf-8')
+    # if not "stm32f10x_it.c" in filename :
+    #     return
+
+    enc = detect_encoding(filename)
+
+    # f = open ( filename, 'r', encoding='utf-8')
+    f = open(filename, 'r', encoding=enc)
     while(True) :
         try:
             textline = f.readline()
@@ -306,7 +334,7 @@ if __name__ == "__main__":
     print ('findfre =', findfre)
     print ('bing =', big)
     print ('nosubdir =', nosubdir)
-    print ("~~~~~~~~~~~~~~~~~~~~~~~ ver 2015.10.26 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print ("~~~~~~~~~~~~~~~~~~~~~~~ ver 2018.03.28 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
     if len(findtext) == 0 and len(findfile) == 0 :
