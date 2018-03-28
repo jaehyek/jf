@@ -10,6 +10,8 @@ from  __future__ import print_function
 import os , argparse, time, sys
 # from Crypto.Util.RFC1751 import wordlist
 import re, glob
+import codecs
+import fnmatch
 
 
 
@@ -58,7 +60,7 @@ def detect_encoding(filename):
     :return: 검출한 file encoding type
     '''
     encodings = ['utf-8', 'euc_kr','cp949', 'ascii']
-    import codecs
+
     for e in encodings:
         try:
             fh = codecs.open(filename, 'r', encoding=e)
@@ -86,9 +88,6 @@ def findtextinfile(filename):
 
     linenumber = 0
     found = 0
-
-    # if not "stm32f10x_it.c" in filename :
-    #     return
 
     enc = detect_encoding(filename)
 
@@ -169,7 +168,7 @@ def runCommand( filename, commandOnFile ):
     print ("Executing :  " , tmpCommand)
     os.system(tmpCommand)
 
-import fnmatch
+
 '''
 PatternMeaningforfnmatch
 * : matches everything
