@@ -89,48 +89,57 @@ def findtextinfile(filename):
     linenumber = 0
     found = 0
 
-    enc = detect_encoding(filename)
+    # enc = detect_encoding(filename)
 
-    # f = open ( filename, 'r', encoding='utf-8')
-    f = open(filename, 'r', encoding=enc)
-    while(True) :
-        try:
-            textline = f.readline()
-        except:
-            continue
-        if len(textline) == 0 :
+    encodings = ['utf-8', 'euc_kr', 'cp949', 'ascii']
+    enc_not_matched = False
+    for enc in encodings:
+        f = open(filename, 'r', encoding=enc)
+        while(True) :
+            try:
+                textline = f.readline()
+            except:
+                enc_not_matched = True
+                break
+            if len(textline) == 0 :
+                break
+            linenumber += 1
+            listfindstr = []
+
+            if findtre == True :
+                listfindstr = refindtext.findall(textline, re.IGNORECASE)
+            else:
+                listfindstr.append( findtext )
+
+            for findstr in listfindstr :
+                pos = textline.lower().find(findstr.lower(), 0)
+                found = 0
+                if (pos != -1 ):
+                    found = 1
+                    # check and skip the long sentense
+                    linelength = len(textline)
+                    if linelength > 100 :
+                        endpos = pos + len(findstr) + 10
+                        if endpos > (linelength-1):
+                            endpos = linelength -1
+                        startpos = pos - 10
+                        if ( startpos < 0 ):
+                            startpos = 0
+                        textline = textline[startpos:endpos]
+                    textline = textline.strip()
+                    msg =  os.path.abspath(filename) + '.' + str(linenumber) + "::  " + textline
+                    try:
+                        print (msg)
+                    except:
+                        print(msg.encode("utf-8"))
+                if found == 1 :
+                    countTextMatched += 1
+        f.close()
+        if enc_not_matched == False :
             break
-        linenumber += 1
-        listfindstr = []
+        else :
+            linenumber = 0
 
-        if findtre == True :
-            listfindstr = refindtext.findall(textline, re.IGNORECASE)
-        else:
-            listfindstr.append( findtext )
-
-        for findstr in listfindstr :
-            pos = textline.lower().find(findstr.lower(), 0)
-            found = 0
-            if (pos != -1 ):
-                found = 1
-                # check and skip the long sentense
-                linelength = len(textline)
-                if linelength > 100 :
-                    endpos = pos + len(findstr) + 10
-                    if endpos > (linelength-1):
-                        endpos = linelength -1
-                    startpos = pos - 10
-                    if ( startpos < 0 ):
-                        startpos = 0
-                    textline = textline[startpos:endpos]
-                textline = textline.strip()
-                msg =  os.path.abspath(filename) + '.' + str(linenumber) + "::  " + textline
-                try:
-                    print (msg)
-                except:
-                    print(msg.encode("utf-8"))
-            if found == 1 :
-                countTextMatched += 1
 
 
 
