@@ -13,8 +13,6 @@ import re, glob
 import codecs
 import fnmatch
 
-
-
 # variables.
 dirskiplist = []
 findlog = ''
@@ -36,7 +34,7 @@ countFilenameMatched = 0
 countTextMatched = 0
 
 fileskiptype = ['.a', '.o', '.so', '.mp3', '.ko', '.zip', '.tar', '.bz', '.apk',
-                '.png', '.jpg', '.jar', '.dex', '.rle', '.cmd', '.pyd', '.pyc', '.exe']
+                '.png', '.jpg', '.jar', '.dex', '.rle', '.cmd', '.pyd', '.pyc', '.exe', '.pdf']
 
 class Tee(object):
     def __init__(self, name):
@@ -91,7 +89,7 @@ def findtextinfile(filename):
 
     # enc = detect_encoding(filename)
 
-    encodings = ['utf-8', 'euc_kr', 'cp949', 'ascii']
+    encodings = ['utf-8', 'euc_kr', 'cp949', 'ascii', 'mbcs']
     enc_not_matched = False
     for enc in encodings:
         f = open(filename, 'r', encoding=enc)
@@ -136,6 +134,7 @@ def findtextinfile(filename):
                     countTextMatched += 1
         f.close()
         if enc_not_matched == False :
+            print("     ??? Can't find encoding type for the file " + filename, end="\n" )
             break
         else :
             linenumber = 0
@@ -196,6 +195,7 @@ def findAtDir ( strpath ):     # always strpath is a start point to search .
 
     for root, dirs, files in os.walk(strpath):
         # first, check the skip dir "
+
         if isdirskip(root) :
             continue
 
@@ -345,7 +345,7 @@ if __name__ == "__main__":
     print ('findfre =', findfre)
     print ('bing =', big)
     print ('nosubdir =', nosubdir)
-    print ("~~~~~~~~~~~~~~~~~~~~~~~ ver 2018.03.28 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print ("~~~~~~~~~~~~~~~~~~~~~~~ ver 2020.09.18 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
     if len(findtext) == 0 and len(findfile) == 0 :
