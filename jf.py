@@ -57,7 +57,7 @@ def detect_encoding(filename):
     :param filename:
     :return: 검출한 file encoding type
     '''
-    encodings = ['utf-8', 'euc_kr','cp949', 'ascii']
+    encodings = ['utf-8', 'euc_kr','cp949', 'ascii', 'mbcs']
 
     for e in encodings:
         try:
@@ -90,15 +90,16 @@ def findtextinfile(filename):
     # enc = detect_encoding(filename)
 
     encodings = ['utf-8', 'euc_kr', 'cp949', 'ascii', 'mbcs']
-    enc_not_matched = False
+    enc_matched = False
     for enc in encodings:
         f = open(filename, 'r', encoding=enc)
         while(True) :
             try:
                 textline = f.readline()
+                enc_matched = True
             except:
-                enc_not_matched = True
-                break
+                enc_matched = False
+                continue
             if len(textline) == 0 :
                 break
             linenumber += 1
@@ -133,11 +134,12 @@ def findtextinfile(filename):
                 if found == 1 :
                     countTextMatched += 1
         f.close()
-        if enc_not_matched == False :
-            print("     ??? Can't find encoding type for the file " + filename, end="\n" )
+        if enc_matched == True :
             break
-        else :
-            linenumber = 0
+    if enc_matched == False:
+        print("     ??? Can't find encoding type for the file " + filename, end="\n")
+
+    linenumber = 0
 
 
 
